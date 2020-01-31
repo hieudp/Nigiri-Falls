@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+
+
+{% block title %}New message{% endblock %}
+
+{% block content %}
+
+<script>
+
+    function stopEnterKey(evt) {
+        var evt = (evt) ? evt : ((event) ? event : null);
+        var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if ((evt.keyCode == 13) && (node.type == "text")) {
+            return false;
+        }
+    }
+    document.onkeypress = stopEnterKey;
+
+</script>
+<center>
+<h1>New message</h1>
+<div class="tableMessage">
+<form action="" method="POST">
+<table>
+<tr>
+        <td>
+            {% csrf_token %}
+            <br/>To : <br/>
+            <input type="text" name="receiver" placeholder="Phone number" size='20' pattern=".{8,}" required title="8 characters minimum" class="form-control"> <br/><br/>
+            Subject : <br/>
+            <input type="text" name="subject" placeholder="Subject" size='20' pattern=".{1,}" required title="1 character minimum" class="form-control"> <br/><br/>
+            Message : <br/>
+
+            <textarea rows="5" cols="50" wrap="hard" name="content" placeholder="New message" pattern=".{1,}" required title="1 character minimum" class="form-control"></textarea>
+
+            <br/>
+            <br/>
+        </td>
+</tr>
+</table>
+<input type="submit" value="Send" name="send" class="uB">
+</form>
+
+{% if error %}
+    <br/>
+    <b>This phonenumber is not registered.</b>
+    <br/>
+{% endif %}
+
+</div>
+<br/><br/>
+<a href="{% url 'messagelist' %}"><button class="uB"> Back to messages </button></a>
+</center>
+{% endblock %}

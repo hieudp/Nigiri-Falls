@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+<center>
+<div class="loginDiv">
+	<h1>New user</h1><br><br>
+	<form method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<td>Phone number</td>
+				<td>
+					{% if errors.0 %}
+					<input type="text" name="phone_number" class="form-control" placeholder="Phone number" style="border: 2px solid #ef3434; border-radius: 10px;" value="{{ data.0 }}" autofocus required>
+					<small class="text-danger">Phone number already registered</small>
+					{% elif errors.1 %}
+					<input type="text" name="phone_number" class="form-control" placeholder="Phone number" style="border: 2px solid #ef3434; border-radius: 10px;" value="{{ data.0 }}" autofocus required>
+					<small class="text-danger">Wrong number format</small>
+					{% else %}
+					<input type="text" name="phone_number" class="form-control" placeholder="Phone number" value="{{ data.0 }}" autofocus required>
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<td>First name</td>
+				<td><input type="text" name="first_name" class="form-control" placeholder="First name" value="{{ data.1 }}"{% if data.0 or data.1 %} style="border: 2px solid #29d840; border-radius: 10px;"{% endif %} required></td>
+			</tr>
+			<tr>
+				<td>Last name</td>
+				<td><input type="text" name="last_name" class="form-control" placeholder="Last name" value="{{ data.1 }}"{% if data.0 or data.1 %} style="border: 2px solid #29d840; border-radius: 10px;"{% endif %} required></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><input type="email" name="email" class="form-control" placeholder="Email" value="{{ data.2 }}"{% if data.0 or data.1 %} style="border: 2px solid #29d840; border-radius: 10px;"{% endif %} required></td>
+			</tr>
+			<tr>
+				<td>Password</td>
+				<td><input type="password" name="password" class="form-control" placeholder="Password" minlength="5" required></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Create user" class="uB"></td>
+			</tr>
+		</table>
+	</form>
+	<br><br><br><a href="{% url 'home' %}"><button class="uB">Cancel</button></a>
+
+	{% if error %}
+		<p>Something went wrong</p>
+	{% endif %}
+</div>
+</center>
+{% endblock %}

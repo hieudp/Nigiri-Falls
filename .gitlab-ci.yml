@@ -1,0 +1,38 @@
+image: ruby:2.2
+image: python:3.7
+
+stages:
+#- test
+- deploy
+
+#run_tests:
+#    stage: test
+#    script:
+#    - apt-get update -qy
+#    - apt-get install -y python-dev python-pip
+#    - pip install -r requirements.txt
+#    - python manage.py test
+#    only:
+#    - master
+
+deploy_staging:
+    stage: deploy
+    script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=nigiristage --api-key=$HEROKU_API_KEY
+    only:
+    - master
+
+
+deploy_production:
+    stage: deploy
+    script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=nigirifalls --api-key=$HEROKU_API_KEY
+    only:
+    - master
+    when: manual

@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+
+
+{% block title %}Add Dish{% endblock %}
+
+{% block content %}
+<!-- Sjekker om brukeren er ansatt og da dukker form-en opp  -->
+{% if request.user.is_staff %}
+<center>
+    <h1>Add a new dish</h1><br>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{form.as_table}}
+        </table>
+        <br>
+        <input type="submit" value="Add Dish" class="uB">
+    </form>
+
+    {% if error %}
+        <p> Something went wrong </p>
+    {% endif %}
+</center>
+{% endif %}
+{% endblock %}

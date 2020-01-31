@@ -1,0 +1,126 @@
+{% extends 'layout.html' %}
+
+
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+    <center>
+    <h1>Your account</h1>
+    <br><br>
+    <div class="orders">
+        <center>
+        <table>
+            <tr>
+                <td style="vertical-align: middle">Phone number:</td>
+                <td style="vertical-align: middle">{{ account.username }}</td>
+                <td>
+                    <button type="button" class = "uB" onclick = "show('change_username_field', 'change_username_button')" id = "change_username_button" style="width: 120px; background-color: #487485; color: white">
+                        Change
+                    </button>
+                </td>
+                <td id="change_username_field" style ="visibility: hidden;">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="username" placeholder="New phone number" required minlength="8" maxlength="8" class="form-control">
+                        <input type="submit" value="Change phone number" name="send" class = "uB">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: middle">First name:</td>
+                <td style="vertical-align: middle">{{ account.first_name }}</td>
+                <td>
+                    <button type="button" class = "uB" onclick = "show('change_first_name_field', 'change_first_name_button')" id = "change_first_name_button" style="width: 120px; background-color: #487485; color: white">
+                        Change
+                    </button>
+                </td>
+                <td id="change_first_name_field" style ="visibility: hidden;">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="first_name" placeholder="New first name" size='20' required class="form-control">
+                        <input type="submit" value="Change first name" name="send" class = "uB">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: middle">
+                    Last name:
+                </td>
+                <td style="vertical-align: middle">{{ account.last_name }}</td>
+                <td>
+                    <button type="button" class = "uB" onclick = "show('change_last_name_field', 'change_last_name_button')" id = "change_last_name_button" style="width: 120px; background-color: #487485; color: white">
+                        Change
+                    </button>
+                </td>
+                <td id="change_last_name_field" style ="visibility: hidden;">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="last_name" placeholder="New last name" size='20' required class="form-control">
+                        <input type="submit" value="Change last name" name="send" class = "uB">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: middle">
+                    Email address:
+                </td>
+                <td style="vertical-align: middle">{{ account.email }}</td>
+                <td>
+                    <button type="button" class = "uB" onclick = "show('change_email_field', 'change_email_button')" id = "change_email_button" style="width: 120px; background-color: #487485; color: white">
+                        Change
+                    </button>
+                </td>
+                <td id="change_email_field" style ="visibility: hidden;">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="email" name="email" placeholder="New email address" size='20' class="form-control">
+                        <input type="submit" value="Change email" name="send" class = "uB">
+                    </form>
+
+                </td>
+              </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: middle">
+                    Password:
+                </td>
+                <td style="vertical-align: middle">********</td>
+                <td>
+                    <button type="button" class = "uB" onclick = "show('change_password_field', 'change_password_button')" id = "change_password_button" style="width: 120px; background-color: #487485; color: white">
+                        Change
+                    </button>
+                </td>
+                <td id="change_password_field" style ="visibility: hidden;">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="password" placeholder="New password" size='20' required minlength="5" class="form-control">
+                        <input type="submit" value="Change password" name="send" class = "uB">
+                    </form>
+                </td>
+              </td>
+            </tr>
+        </center>
+        </table>
+
+    {% if action %}
+        <div class = "alert alert-success" role="alert" style="width: 320px">
+            {{ action }} is now changed.
+        </div>
+    {% endif %}
+
+    <script>
+        function show(id, id2){
+            if (document.getElementById(id).style.visibility === "hidden"){
+                document.getElementById(id).style.visibility = "visible";
+                document.getElementById(id2).innerHTML = "Don't change";
+            } else {
+                document.getElementById(id).style.visibility = "hidden";
+                document.getElementById(id2).innerHTML = "Change";
+            }
+        }
+    </script>
+      </div>
+  </center>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Update order{% endblock %}
+
+{% block content %}
+    <div class="form-group">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h3>Date and Time:</h3>
+            <input type="datetime-local" name="datetime" required class='form-control'>
+            <br>
+            <input type="submit" value="Update date and time" name="send" class="uB">
+        </form>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h3>Restaurant:</h3>
+            <select name="restaurant" class="form-control">
+                <option value="Trondheim">Trondheim</option>
+                <option value="Oslo">Oslo</option>
+                <option value="Bergen">Bergen</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Update restaurant" name="send" class="uB">
+        </form>
+        <br><br><br><br>
+        {% if user.is_staff %}
+        <a href="{% url 'order_manage' %}"><button class="uB">Cancel</button></a>
+        {% else %}
+        <a href="{% url 'orders' %}"><button class="uB">Cancel</button></a>
+        {% endif %}
+    </div>
+    <script>
+        let now = new Date();
+        now = new Date(now.getTime() + 30 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000); // add 30 minutes and the timezone offset
+        let datetime = now.toISOString().slice(0, 16); // YYYY-mm-ddTHH-MM
+        document.getElementsByName("datetime")[0].value = datetime;
+        document.getElementsByName("datetime")[0].setAttribute("min", datetime);
+    </script>
+{% endblock %}

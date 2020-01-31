@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+{% load static %}
+    <img src="{% static 'home/Logo.png' %}" id="logoImg" class="rounded mx-auto d-block" alt="Logo">
+<div class="menu">
+    <table>
+           <!-- Løkke for å få opp alle rettene på siden og "add" og "remove" knapper for hver rett, samnt en "amount"-->
+            {% for dish in dishes %}
+                <tr id="row_{{ dish.name }}">
+                    <td>{{ dish.name}}</td>
+                    {% load static %}
+                    <td class="dishes"><img src="{% static dish.image %}" width="200"></td>
+                    <td>{{ dish.price }} kr</td>
+                    <td><button class="btn-success add" type="button" id="{{dish.name}}" {% if dish.enabled == False %}disabled style="opacity:0.6;"{% endif %}>Add</button></td>
+                    <td><p id="amount_{{ dish.name }}">{{ session.dishes|amount:dish.name }}</p></td>
+                    <td><button class="btn-danger remove" type="button" id="{{dish.name}}"{% if dish.enabled == False %}disabled style="opacity:0.6;"{% endif %}>Remove</button></td>
+                    {% if request.user.is_staff %}
+                        <td><form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{dish.name}}" name="dish">
+                        <input class="fill" type="submit"  {% if dish.enabled == False %} value="Enable" style="background-color:#4CAF50" {% else %} value="Disable" style="background-color:#f44336" {% endif %} >
+                        </form></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+    </table>
+</div>
+<div class="categories">
+    <table>
+        <tr>
+            <td style=font-size:25px;> Categories </td>
+        </tr>
+        <!--Løkke for å få opp knappene til kategoriene -->
+        {% for categori in categories %}
+        <tr>
+            <td><button class="setCategory butt" id="button_{{ categori.name }}">{{ categori.name }}</button></td>
+        </tr>
+        {% endfor %}
+    </table>    
+</div>
+<script>
+    //Function for selecting a category.
+    //Sends an AJAX request to the server at the URL 'set_categori', with the selected catorigy as data.
+    //The server then calls a view function which updates the session variable, and returns the dishes to be shown as response.
+    //The function then hides every dish, and shows the right ones.
+    function selectCategory(category){
+        $.ajax({
+            url: "{% url 'set_categori' %}",
+            type: "get",
+            data: {"categori": category},
+            success: function(response){
+                $("[id='button_" + category + "']").css("border", "2px solid #D87E7D");
+                $("[id='button_" + category + "']").css("border-radius", "10px")
+                var allCategories = response["all_categories"]
+                for(i = 0; i < allCategories.length; i++){
+                    $("[id='button_" + allCategories[i] + "']").css("border", "none");
+                }
+                $("[id='button_" + category + "']").css("border", "2px solid #D87E7D");
+                var allDishes = response["all_dishes"];
+                for(i = 0; i < allDishes.length; i++){
+                    $("[id='row_" + allDishes[i] + "']").hide();
+                }
+                var showDishes = response["show_dishes"];
+                for(i = 0; i < showDishes.length; i++){
+                    $("[id='row_" + showDishes[i] + "']").show();
+                }
+            }
+        });
+    }
+    //Call the function once on pageload.
+    selectCategory("{{ session.categories }}");
+
+    //Also call it when a category is selected.
+    $(".setCategory").click(function(e){
+        var category = e.target.innerHTML;
+        selectCategory(category);
+    });
+    
+    //Sends an AJAX, which updates the amount on the correct dish in the session variable.
+    //Then increase the number clientside.
+    $(".add").click(function(e){
+        $.ajax({
+            url: "{% url 'increase' %}",
+            type: "get",
+            data: {"dish": e.target.id},
+            success: function(result){
+                var amount = parseInt($("[id='amount_" + e.target.id + "']").text());
+                $("[id='amount_" + e.target.id + "']").text(amount + 1);
+                var cartAmount = parseInt($("#cartAmount").text());
+                $("#cartAmount").text(cartAmount + 1);
+            }
+        });
+    });
+    
+    //Sends an AJAX, which updates the amount on the correct dish in the session variable.
+    //Then decrease the number clientside.
+    $(".remove").click(function(e){
+        $.ajax({
+            url: "{% url 'decrease' %}",
+            type: "get",
+            data: {"dish": e.target.id},
+            success: function(response){
+                var amount = parseInt($("[id='amount_" + e.target.id + "']").text());
+                if(amount > 0){
+                    $("[id='amount_" + e.target.id + "']").text(amount - 1);
+                    var cartAmount = parseInt($("#cartAmount").text());
+                    $("#cartAmount").text(cartAmount - 1);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

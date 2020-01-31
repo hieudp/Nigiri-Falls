@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+
+<center>
+
+<h1>Your messages</h1>
+
+<br/>
+
+<div class="tableMessage">
+<table>
+
+<td>
+  <b> Sender: </b>
+</td>
+
+<td>
+  <b> Receiver: </b>
+</td>
+
+<td>
+  <b> Subject: </b>
+</td>
+
+<td >
+  <b> Content: </b>
+</td>
+
+<td>
+  <b> Sent: </b>
+</td>
+
+{% for message in messages %}
+
+  <tr>
+      <td>
+        {{ message.sender.first_name }} {{ message.sender.last_name }}
+      </td>
+      <td>
+        {{ message.receiver.first_name }} {{ message.receiver.last_name }}
+      </td>
+      <td>
+        {{ message.msg_subject }}
+      </td>
+      <td>
+        <p>{{ message.msg_content }}</p>
+      </td>
+      <td>
+        {{ message.created_at }}
+      </td>
+
+  </tr>
+{% endfor %}
+</table>
+</div>
+{% if user.is_staff %}
+<br><br><br>
+<a href="{% url 'message' %}"><button class="uB"> New message </button></a>
+<br>
+{% endif %}
+</center>
+{% endblock %}

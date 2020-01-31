@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}Delete order{% endblock %}
+
+{% block content %}
+
+<h1>Delete Order</h1>
+
+<br><p>Are you sure you want to delete the order from the {{ order.restaurant }} restaurant at {{ order.datetime.time|time:'H:i' }} {{ order.datetime.date }}?</p><br>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" value="Yes, delete." class="uB">
+</form><br><br>
+{% if user.is_staff %}
+<a href="{% url 'order_manage' %}"><button class="uB">Cancel</button></a>
+{% else %}
+<a href="{% url 'orders' %}"><button class="uB">Cancel</button></a>
+{% endif %}
+
+{% endblock %}

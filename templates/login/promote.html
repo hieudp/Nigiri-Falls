@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}Promote{% endblock %}
+
+{% block content %}
+	<center>
+		<h1>Promote a user to Staff</h1><br>
+		<form method="post">
+			{% csrf_token %}
+			Phone number: <input type="number" name="phonenumber" autofocus required><br><br>
+			<input type="submit" value="Promote" class="uB">
+		</form>
+		<br><br<br><p>{{ message }}</p>
+	</center>
+{% endblock %}

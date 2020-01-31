@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block title %}About{% endblock %}
+{% block content %}
+{% load static %}
+    <img src="{% static 'home/Logo.png' %}" id = "logoImg" class="rounded mx-auto d-block" alt="Logo">
+
+<p align="center">
+  On behalf of Nigiri Falls, we welcome you to our family of restaurants. At Nigiri Falls, we have created a sophisticated, yet welcoming, atmosphere in which we create exceptional sushi, sashimi, nigrinizushi, cooked Asian dishes and more for your enjoyment.
+  Dedicated to complete customer satisfaction, we hope that you will think of us as your favorite, local restaurant destination, no matter what the occasion!
+  <br><br>
+  Nigiri Falls is a world known sushi resturant. It all started in 1999 with our first restaurant in Trondheim. A few years later we opened a new resturant in Oslo and followed up with a brand new restaurant in Bergen in 2004.
+</p>
+<div class="wrapper">
+  <div class="aboutcontainer">
+    Nigiri Falls Trondheim
+    <br><br>
+    Olav Tryggvasons gate 19
+    <br><br>
+    7030 Trondheim
+    <br><br>
+    47 47 30 30
+    <br><br>
+    {% load static %}
+    <img src="{% static 'home/resturant1.jpg' %}" style="width:100%">
+  </div>
+  <div class="aboutcontainer">
+    Nigiri Falls Oslo
+    <br><br>
+    Karl Johans gate 5
+    <br><br>
+    0154 Oslo
+    <br><br>
+    47 47 30 31
+    <br><br>
+    {% load static %}
+    <img src="{% static 'home/resturant2.jpg' %}" style="width:90%">
+  </div>
+  <div class="aboutcontainer">
+    Nigiri Falls Bergen
+    <br><br>
+    Olav Kyrres gate 11
+    <br><br>
+    5015 Bergen
+    <br><br>
+    47 47 30 32
+    <br><br>
+    {% load static %}
+    <img src="{% static 'home/resturant3.jpg' %}" style="width:100%">
+  </div>
+</div>
+
+
+{% endblock %}

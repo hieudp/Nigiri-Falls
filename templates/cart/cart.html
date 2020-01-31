@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <center>
+        <h1>Your Cart</h1><br>
+        <div class="tableCart">
+            <table>
+                <tr>
+                    <th colspan="2">Dish</th>
+                    <th>Price</th>
+                    <th colspan="3">Amount</th>
+                </tr>
+                <!--values has the format (amount, price, image)-->
+                {% for key, values in session.dishes.items %}
+                {% if values.0 > 0 %}
+                <tr id="row_{{ key }}">
+                    <td>{{ key }}</td>
+                    {% load static %}
+                    <td><img src="{% static values.2 %}" width="100"></td>
+                    <td>{{ values.1 }}</td>
+                    <td><button class="addCart btn btn-success" id="{{ key }}"> + </button></td>
+                    <td><span id="amount_{{ key }}">{{ values.0 }}</span></td>
+                    <td><button class="removeCart btn btn-danger" id="{{ key }}"> - </button></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr><td colspan="5"><br></td></tr>
+                <tr><td colspan="5">Total Price: <span id="totalPrice">{{ price }}</span> kr</td></tr>
+                <tr><td colspan="5"><br></td></tr>
+                <form method="post">
+                    {% csrf_token %}
+                    <tr>
+                        <td colspan="2">Restaurant:</td>
+                        <td colspan="3">
+                            <select name="restaurant" class="form-control">
+                                <option value="Trondheim">Trondheim</option>
+                                <option value="Oslo">Oslo</option>
+                                <option value="Bergen">Bergen</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Date and Time:</td>
+                        <td colspan="3"><input type="datetime-local" name="datetime" required class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><br><input type="submit" value="Set order" class="uB"></td>
+                    </tr>
+                </form>
+                {% if error.0 %}
+                    <tr><td colspan="5">You are not logged in</td></tr>
+                {% endif%}
+                {% if error.1 %}
+                    <tr><td colspan="5">No dishes selected</td></tr>
+                {% endif%}
+            </table>
+        </div>
+        <script>
+            //Set the min datetime to 30 minutes from now.
+            var now = new Date();
+            now = new Date(now.getTime() + 30 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000); // add 30 minutes and the timezone offset
+            var datetime = now.toISOString().slice(0, 16); // YYYY-mm-ddTHH-MM
+            document.getElementsByName("datetime")[0].value = datetime;
+            document.getElementsByName("datetime")[0].setAttribute("min", datetime);
+
+            //Sends an AJAX, which updates the amount on the correct dish in the session variable.
+            //Then increase the number clientside.
+            $(".addCart").click(function(e){
+                $.ajax({
+                    url: "{% url 'increase' %}",
+                    type: "get",
+                    data: {"dish": e.target.id},
+                    success: function(response){
+                        var amount = parseInt($("[id='amount_" + e.target.id + "']").text());
+                        $("[id='amount_" + e.target.id + "']").text(amount + 1);
+                        var cartAmount = parseInt($("#cartAmount").text());
+                        $("#cartAmount").text(cartAmount + 1);
+                        $("#totalPrice").text(response["total_price"]);
+                    }
+                });
+            });
+            
+            //Sends an AJAX, which updates the amount on the correct dish in the session variable.
+            //Then decrease the number clientside.
+            $(".removeCart").click(function(e){
+                $.ajax({
+                    url: "{% url 'decrease' %}",
+                    type: "get",
+                    data: {"dish": e.target.id},
+                    success: function(response){
+                        var amount = parseInt($("[id='amount_" + e.target.id + "']").text());
+                        if(amount > 0){
+                            $("[id='amount_" + e.target.id + "']").text(amount - 1);
+                            var cartAmount = parseInt($("#cartAmount").text());
+                            $("#cartAmount").text(cartAmount - 1);
+                            $("#totalPrice").text(response["total_price"]);
+                            if(amount - 1 == 0){
+                                $("[id='row_" + e.target.id + "']").hide();
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    </center>
+{% endblock %}

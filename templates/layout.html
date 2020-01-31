@@ -1,0 +1,100 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href = "{% static 'layout.css' %}">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>{% block title %}{% endblock %} - Nigiri Falls</title>
+
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'home/Logo.png' %}"/>
+  </head>
+  <body>
+    <div class="pos-f-t">
+  <div id = "divCartProfile">
+       <a href="{% url 'home' %}"><button type="button" class="btnHome">
+             <span style="color:#F9F9F9"> <i class="glyphicon glyphicon-home" id = "icons2"></i></span>
+         </button></a>
+         <a href="{% url 'about' %}"><button type="button" class="btnAbout">
+              <span style="color:#F9F9F9"> <i class="glyphicon glyphicon-info-sign" id = "icons2"></i></span>
+             </button></a>
+    <a href="{% url 'cart' %}"><button type="button" class = "btnCart">
+        <span style="color:#F9F9F9"><i class="glyphicon glyphicon-shopping-cart" id = "icons2"></i></span>
+        <span id="cartAmount" style="color:#DB5D5C; font-size:16px; font-weight:bold; position:relative; left:2px; top:-32px;" >{{ session.cartAmount }}</span>
+    </button></a>
+  </div>
+  {% if user.is_authenticated %}
+  <nav class="navbar navbar-dark" id = "navbarcollapse">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon">
+    </span>
+    </button>
+  </nav>
+  <div class="collapse" id="navbarToggleExternalContent">
+      <div class="collapseinfo">
+        <a href="{% url 'account' %}"><button type="button" class="btnNav">
+             <span style="color:#487485"> <i class="glyphicon glyphicon-user" id = "icons"></i></span>
+        </button></a>
+        <a href="{% url 'orders' %}"><button type="button" class = "btnNav">
+            <span style="color:#487485"><i class="glyphicon glyphicon-list-alt" id = "icons"></i></span>
+      </button></a>
+      <a href="{% url 'messagelist' %}"><button type="button" class = "btnNav">
+            <span style="color:#487485"><i class="glyphicon glyphicon-envelope" id = "icons"></i></span>
+        </button></a>
+        <a href="{% url 'login' %}"><button type="button" class = "btnNav">
+            <span style="color:#487485"><i class="glyphicon glyphicon-log-out" id = "icons"></i></span>
+        </button></a>
+      </div>
+    </div>
+    {% else %}
+    <a href="{% url 'login' %}"><button type="button" class = "btnProfile">
+        <span style="color:#F9F9F9"><i class="glyphicon glyphicon-log-in" id = "icons2"></i></span>
+      </button></a>
+    {% endif %}
+    {% if user.is_staff %}
+    <nav class="navbar navbar-dark" id = "navbarcollapse">
+        <button style="width:55px;height:50px;" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent2" aria-controls="navbarToggleExternalContent2" aria-expanded="false" aria-label="Toggle navigation">
+            <span style="color:#487485"> <i class="glyphicon glyphicon-cog" style="color:#fff;font-size:30px;"></i></span>
+          </span>
+          </button>
+    </nav>
+    <div class="collapse" id="navbarToggleExternalContent2">
+        <div class="collapseinfo">
+            <a href="{% url 'promote' %}"><button type="button" class="btnNav">
+                <span style="color:#487485"> <i class="glyphicon glyphicon-circle-arrow-up" id = "icons"></i></span>
+          </button></a>
+          <a href="{% url 'addDish' %}"><button type="button" class="btnNav">
+                <span style="color:#487485"> <i class="glyphicon glyphicon-plus-sign" id = "icons"></i></span>
+          </button></a>
+          <a href="{% url 'addCategori' %}"><button type="button" class="btnNav">
+              <span style="color:#487485"> <i class="glyphicon glyphicon-tags" id = "icons"></i></span>
+        </button></a>
+          <a href="{% url 'order_manage' %}"><button type="button" class="btnNav">
+              <span style="color:#487485"> <i class="glyphicon glyphicon-tasks" id = "icons"></i></span>
+        </button></a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+    <div class="container" style="padding:20px; padding-top:20px;">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

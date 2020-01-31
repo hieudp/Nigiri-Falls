@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+
+
+{% block title %}Add Category{% endblock %}
+
+<!-- Sjekker om brukeren er ansatt, og gir mulighet for å legge til en ny kategori -->
+{% block content %}
+  {% if request.user.is_staff %}
+  <center>
+    <h1>Add a new category</h1><br>
+    <form method="POST">
+        {% csrf_token %}
+        {{catform.as_p}}
+        <br>
+        <input type="submit" value="Add Categori" class="uB">
+    </form>
+    {% endif %}
+    {% if error%}
+    <p> Something went worng </p>
+  </center>
+  {% endif %}
+{% endblock %}
